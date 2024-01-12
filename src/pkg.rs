@@ -3,7 +3,7 @@ use std::fs;
 pub fn create_package(pkg_name:&str)->std::io::Result<()>
 {
     let dir_path = format!("../{}", pkg_name);
-    fs::create_dir(&dir_path)?;
+    fs::create_dir_all(&dir_path)?;
     let cargo_toml_path = format!("{}/Cargo.toml", dir_path);
     let toml_contents = format!("{}{}", create_toml_pkg_info(pkg_name), create_toml_depend_info());
     let _  = fs::write(cargo_toml_path, toml_contents);

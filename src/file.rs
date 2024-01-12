@@ -18,9 +18,10 @@ pub fn get_msg_file(file_name:String)->Result<String, Error>
     }
 }
 
-pub fn create_msg_file(pkg_name:&str)
+pub fn create_msg(pkg_name:&str, msg_name:&str)->Result<(), Error>
 {
-
+    let _ = create_lib_rs(pkg_name);
+    create_msg_rs(pkg_name, msg_name)
 }
 
 fn create_lib_rs(pkg_name:&str)->Result<(), Error>
@@ -39,4 +40,45 @@ fn create_lib_rs(pkg_name:&str)->Result<(), Error>
             return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Different file types"));
         }
     }
+}
+fn create_msg_rs(pkg_name:&str, msg_name:&str)->Result<(), Error>
+{
+    let pkg_path = format!("../{}", pkg_name);
+
+    let lib_path = format!("{}/src/msg.rs", &pkg_path);
+    match fs::write(lib_path, format!("pub mod {};\n", msg_name))
+    {
+        Ok(_)=>{
+            zmg_log_info("create msg.rs".to_string());
+            Ok(())
+        },
+        Err(_)=>{
+            zmg_log_err("Failed to create msg.rs".to_string());
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Different file types"));
+        }
+    }
+}
+
+fn create_msg_dir(pkg_name:&str)->Result<(), Error>
+{
+    let pkg_path = format!("../{}", pkg_name);
+
+    let dir_path = format!("{}/src/msg", &pkg_path);
+
+    match fs::create_dir(dir_path)
+    {
+        Ok(_)=>{
+            zmg_log_info("create \"msg\" directory".to_string());
+            Ok(())
+        },
+        Err(_)=>{
+            zmg_log_err("Failed to create \"msg\" directory".to_string());
+            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Different file types"));
+        }
+    }
+}
+
+fn create_original()
+{
+    
 }
