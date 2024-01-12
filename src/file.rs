@@ -21,7 +21,6 @@ pub fn get_msg_file(file_name:String)->Result<String, Error>
 pub fn create_msg(pkg_name:&str, msg_name:&str)
 {
     let _ = create_lib_rs(pkg_name);
-    let _ = create_msg_dir(pkg_name);
     let _ = create_msg_rs(pkg_name, msg_name);
 }
 
@@ -60,33 +59,9 @@ fn create_msg_rs(pkg_name:&str, msg_name:&str)->Result<(), Error>
     }
 }
 
-fn create_msg_dir(pkg_name:&str)->Result<(), Error>
+fn _content_of_msg_rs(msg_file_content:String)->String
 {
-    let pkg_path = format!("../{}", pkg_name);
-
-    let dir_path = format!("{}/src/msg", &pkg_path);
-
-    match fs::create_dir(dir_path)
-    {
-        Ok(_)=>{
-            zmg_log_info("create \"msg\" directory".to_string());
-            Ok(())
-        },
-        Err(_)=>{
-            zmg_log_err("Failed to create \"msg\" directory".to_string());
-            return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Different file types"));
-        }
-    }
-}
-
-fn create_original_msg_rs(pkg_name:&str, msg_name:&str)
-{
-    let pkg_path = format!("../{}", pkg_name);
-    let original_msg_rs_path = format!("{}/src/msg/{}.rs", pkg_path, msg_name);
-
-    match fs::write(original_msg_rs_path, "")
-    {
-        Ok(_)=>{},
-        Err(_)=>{}
-    }
+    let start = "use serde::{Serialize, Deserialize};\n\n".to_string();
+    
+    format!("{}{}", start, msg_file_content)
 }
