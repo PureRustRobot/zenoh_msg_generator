@@ -1,6 +1,10 @@
-use std::io::Error;
+use std::{io::{
+    Error,
+    BufRead,
+    BufReader
+}, result};
 use crate::log::*;
-use std::fs;
+use std::fs::{self, File};
 
 pub fn get_msg_file(file_name:String)->Result<String, Error>
 {
@@ -59,9 +63,58 @@ fn create_msg_rs(pkg_name:&str, msg_name:&str)->Result<(), Error>
     }
 }
 
-fn _content_of_msg_rs(msg_file_content:String)->String
+fn content_of_msg_rs(msg_file_path:String)->String
 {
     let start = "use serde::{Serialize, Deserialize};\n\n".to_string();
-    
-    format!("{}{}", start, msg_file_content)
+
+    let name_index = msg_file_path.find(".").unwrap();
+    let struct_name = msg_file_path.get(0..name_index).unwrap();
+
+    let name_str = format!("#[derive(Serialize, Deserialize)]\npub struct {}{{\n", struct_name);
+
+    let mut contents = Vec::<String>::new();
+
+    for result in BufReader::new(File::open(msg_file_path).unwrap()).lines()
+    {
+        let get_str = result.unwrap();
+        let space_index = get_str.find(" ").unwrap();
+        let comp_name = get_str.get(space_index..).unwrap();
+        match get_str.get(0..space_index).unwrap()
+        {
+            "string"=>{
+                let comp = format!("    {}:String\n", comp_name);
+                contents.push(comp);
+            },
+            "float32"=>{
+                let comp = format!("    {}:f32\n", comp_name);
+                contents.push(comp);
+            },
+            "float64"=>{
+                let comp = format!("    {}:f64\n", comp_name);
+                contents.push(comp);
+            },
+            "int32"=>{
+                let comp = format!("    {}:i32\n", comp_name);
+                contents.push(comp);
+            },
+            "int64"=>{
+                let comp = format!("    {}:i64\n", comp_name);
+                contents.push(comp);
+            },
+            "bool"=>{
+                let comp = format!("    {}:bool\n", comp_name);
+                contents.push(comp);
+            },
+            _=>{}
+        }
+    }
+
+    let mut result = format!("{}{}", start, name_str);
+
+    for i in 0..contents.len()
+    {
+        result = format!("{}{}", result, contents[i]);
+    }
+
+    format!("{}\n}}", result, )
 }
