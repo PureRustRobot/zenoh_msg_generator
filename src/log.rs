@@ -2,10 +2,10 @@ use colored::{self, Colorize};
 
 pub fn zmg_log_info(msg:String)
 {
-    println!("{}:{}", "[ZenohMsgGenerator]".bright_blue(), msg.bright_blue());
+    println!("{}:{}", "[ZenohMsgGenerator][INFO]".blue(), msg.blue());
 }
 
 pub fn zmg_log_err(msg:String)
 {
-    println!("{}:{}", "[ZenohMsgGenerator]".bright_red(), msg.bright_red());
+    println!("{}:{}", "[ZenohMsgGenerator][ERROR]".red(), msg.red());
 }

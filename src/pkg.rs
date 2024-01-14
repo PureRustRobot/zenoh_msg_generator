@@ -1,9 +1,14 @@
 use std::fs;
 
+/* 
+create ../pkg
+pkg/Cargo.toml
+*/ 
 pub fn create_package(pkg_name:&str)->std::io::Result<()>
 {
     let dir_path = format!("../{}", pkg_name);
-    fs::create_dir_all(&dir_path)?;
+    let src_path = format!("{}/src", dir_path);
+    fs::create_dir_all(&src_path)?;
     let cargo_toml_path = format!("{}/Cargo.toml", dir_path);
     let toml_contents = format!("{}{}", create_toml_pkg_info(pkg_name), create_toml_depend_info());
     let _  = fs::write(cargo_toml_path, toml_contents);
@@ -26,7 +31,7 @@ fn create_toml_pkg_info(pkg_name:&str)->String
 fn create_toml_depend_info()->String
 {
     let start = "[dependencies]\n".to_string();
-    let serde_info = "serde = {version = \"\", features = [\"derive\"]}\n".to_string();
+    let serde_info = "serde = {version = \"1.0.148\", features = [\"derive\"]}\n".to_string();
     let serde_json_info = "serde_json = \"1.0.41\"".to_string();
 
     let result = format!("{}{}{}", start, serde_info, serde_json_info);
