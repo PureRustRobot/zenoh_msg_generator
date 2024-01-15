@@ -85,27 +85,27 @@ fn content_of_msg_rs(msg_file_path:String)->String
         match get_str.get(0..space_index).unwrap()
         {
             "string"=>{
-                let comp = format!("    {}:String,\n", comp_name);
+                let comp = format!("    pub {}:String,\n", comp_name);
                 contents.push(comp);
             },
             "float32"=>{
-                let comp = format!("    {}:f32,\n", comp_name);
+                let comp = format!("    pub {}:f32,\n", comp_name);
                 contents.push(comp);
             },
             "float64"=>{
-                let comp = format!("    {}:f64,\n", comp_name);
+                let comp = format!("    pub {}:f64,\n", comp_name);
                 contents.push(comp);
             },
             "int32"=>{
-                let comp = format!("    {}:i32,\n", comp_name);
+                let comp = format!("    pub {}:i32,\n", comp_name);
                 contents.push(comp);
             },
             "int64"=>{
-                let comp = format!("    {}:i64,\n", comp_name);
+                let comp = format!("    pub {}:i64,\n", comp_name);
                 contents.push(comp);
             },
             "bool"=>{
-                let comp = format!("    {}:bool,\n", comp_name);
+                let comp = format!("    pub {}:bool,\n", comp_name);
                 contents.push(comp);
             },
             _=>{}
@@ -198,11 +198,11 @@ pub fn add_msg(pkg_name:&str, msg_file:String)->Result<(), Error>
     match fs::write(pkg_path, result)
     {
         Ok(_)=>{
-            zmg_log_info("create lib.rs".to_string());
+            zmg_log_info("Add msg to msg.rs".to_string());
             Ok(())
         },
         Err(_)=>{
-            zmg_log_err("Failed to create lib.rs".to_string());
+            zmg_log_err("Failed to Add message".to_string());
             return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Different file types"));
         }
     }
