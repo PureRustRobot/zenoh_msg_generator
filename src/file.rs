@@ -158,27 +158,27 @@ pub fn add_msg(pkg_name:&str, msg_file:String)->Result<(), Error>
         match get_str.get(0..space_index).unwrap()
         {
             "string"=>{
-                let comp = format!("    {}:String,\n", comp_name);
+                let comp = format!("    pub {}:String,\n", comp_name);
                 content.push(comp);
             },
             "float32"=>{
-                let comp = format!("    {}:f32,\n", comp_name);
+                let comp = format!("    pub {}:f32,\n", comp_name);
                 content.push(comp);
             },
             "float64"=>{
-                let comp = format!("    {}:f64,\n", comp_name);
+                let comp = format!("    pub {}:f64,\n", comp_name);
                 content.push(comp);
             },
             "int32"=>{
-                let comp = format!("    {}:i32,\n", comp_name);
+                let comp = format!("    pub {}:i32,\n", comp_name);
                 content.push(comp);
             },
             "int64"=>{
-                let comp = format!("    {}:i64,\n", comp_name);
+                let comp = format!("    pub {}:i64,\n", comp_name);
                 content.push(comp);
             },
             "bool"=>{
-                let comp = format!("    {}:bool,\n", comp_name);
+                let comp = format!("    pub {}:bool,\n", comp_name);
                 content.push(comp);
             },
             _=>{}
